@@ -1,0 +1,6 @@
+name = "image-generator"
+main = "src/index.js"
+compatibility_date = "2024-03-04"
+
+[ai]
+binding = "AI"
