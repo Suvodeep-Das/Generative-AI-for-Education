@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Your NLP Assistant</title>
+		<style>
+			@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+			@import url('https://unpkg.com/normalize.css');
+			html {
+				font-family: 'Roboto Mono', monospace;
+				line-height: 1.5;
+				& * {
+					font-size: 16px;
+				}
+			}
+
+			body {
+				&::before {
+					content: '';
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background-image: url('https://firebasestorage.googleapis.com/v0/b/genai-for-education.appspot.com/o/Pic2.jpg?alt=media&token=e1396886-1321-4897-b9c4-3c30f8564462');
+					background-size: cover;
+					background-position: center;
+					z-index: -1;
+					opacity: 0.3;
+				}
+			}
+
+			div#content {
+				align-items: center;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			div#header {
+				width: 100%;
+				align-items: center;
+				gap: 20px;
+				display: flex;
+				justify-content: space-between;
+				background-color: #aabdea;
+				padding: 0.75rem 0;
+				border-radius: 0 0 10px 10px;
+
+				& h1 {
+					font-size: 20px;
+					width: 100%;
+					text-align: center;
+					background-color: #aabdea;
+					padding: 0.75rem 0;
+					border-radius: 0 0 10px 10px;
+				}
+
+				& p {
+					padding-right: 3rem;
+				}
+			}
+
+			div#response {
+				position: fixed;
+				top: 33%;
+				width: 50%;
+				background-color: transparent;
+				padding: 2rem 3rem;
+				border-radius: 15px;
+			}
+
+			form#query-form {
+				bottom: 25px;
+				position: fixed;
+				display: flex;
+				justify-content: space-between;
+				margin: 0 5rem;
+				width: 80%;
+				padding: 0.75rem;
+				border-radius: 10px;
+				border: 1px solid #3e3d3d;
+				background-color: #b2c7e7;
+			}
+
+			form#query-form input {
+				width: 90%;
+				background-color: #b2c7e7;
+				outline: none;
+				border: none;
+			}
+
+			form#query-form button {
+				padding: 0.5rem;
+				background-color: #a5a4df;
+				border: 1px solid #1e1a1e;
+				border-radius: 5px;
+				outline: none;
+				display: flex;
+				align-items: center;
+				cursor: pointer;
+
+				& svg {
+					font-size: 20px;
+					color: #1a181a;
+				}
+				&:hover {
+					background-color: #42469a;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="content">
+			<div id="header">
+				<h1>Your NLP Assistant</h1>
+				<p><a href="/">(Streaming)</a></p>
+			</div>
+
+			<div id="response"></div>
+
+			<form id="query-form">
+				<input autofocus name="query" placeholder="Ask the AI anything" type="text" />
+				<button type="submit">Ask</button>
+			</form>
+		</div>
+
+		<script>
+			const submitForm = async (event) => {
+				event.preventDefault();
+
+				// post json to /
+				const response = await fetch('/', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						query: event.target.query.value,
+					}),
+				});
+
+				const answer = await response.text();
+				document.querySelector('div#response').style.backgroundColor = '#ebe1eb';
+				document.querySelector('div#response').innerHTML = answer;
+
+				event.target.query.value = '';
+			};
+
+			document.querySelector('form#query-form').addEventListener('submit', submitForm);
+		</script>
+	</body>
+</html>
